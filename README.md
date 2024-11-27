@@ -1,120 +1,131 @@
-# Expo React Native UI Template
+# Input Component
 
-This is a React Native UI template built with Expo. It provides a simple starting point for building mobile apps using Expo and React Native.
+This is a versatile and customizable **Input** component for React Native, suitable for use in any project built with Expo or React Native. It supports multiple variants, validation, icons, and accessibility features, making it a robust choice for input fields in your application.
 
 ## Features
 
-- Basic UI structure
-- Responsive layout
-- Expo development environment setup
-- Simple components to get started
-
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- [Node.js](https://nodejs.org/) (version 18.x or higher)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
-- A code editor, e.g., [VS Code](https://code.visualstudio.com/)
-- [Android Studio](https://developer.android.com/studio) or [Xcode](https://developer.apple.com/xcode/) for iOS development (optional, but needed for running on real devices)
+- Multiple input variants (`underline`, `outlined`, `ghost`) for flexible design.
+- Built-in validation support with custom rules and error messages.
+- Dynamic theming for light and dark mode.
+- Icons on the left or right, with customizable behavior.
+- Secure text entry (e.g., password fields) with toggle visibility.
+- Loading and disabled states for interactive and non-interactive fields.
+- Full support for additional props of the native `TextInput`.
 
 ## Installation
 
-Follow these steps to get your template up and running:
-
-### 1. Start with Expo Create App
-
-To create a new project, run the following command:
+To use the **Input Component**, ensure the following dependencies are installed:
 
 ```bash
-npx create-expo-app -t https://github.com/VirgoLabs/ui-template
+npm install react-native
+npm install @expo/vector-icons
 ```
 
-### 2. Install Dependencies
-
-Navigate to the project directory and install the dependencies:
+If you're using Expo, the `Ionicons` package should already be included. Otherwise, install it via:
 
 ```bash
-cd your-repository-name
-npm install
+npm install @expo/vector-icons
 ```
 
-Alternatively, you can use `yarn` or `bun` if you're using as your package manager:
+Copy the `Input` component code into your project, along with the `Colors.ts` file for dynamic theming.
 
-```bash
-cd your-repository-name
-yarn install
+## Usage
+
+Here’s an example of how to use the **Input Component**:
+
+```tsx
+import React from "react";
+import { View } from "react-native";
+import Input from "@/components/Input";
+
+const App = () => {
+    const handleValidation = (isValid: boolean) => {
+        console.log(`Input valid: ${isValid}`);
+    };
+
+    return (
+        <View style={{ padding: 20 }}>
+            <Input
+                label="Username"
+                placeholder="Enter your username"
+                validationRules={[
+                    { validate: (value) => value.length > 0, errorMessage: "Field cannot be empty" },
+                    { validate: (value) => value.length >= 3, errorMessage: "Minimum 3 characters required" },
+                ]}
+                secureTextEntry={false}
+                onValidationComplete={handleValidation}
+                variant="outlined"
+                leftIcon={<Ionicons name="person" size={20} color="gray" />}
+                rightIcon={<Ionicons name="checkmark-circle" size={20} color="green" />}
+            />
+        </View>
+    );
+};
+
+export default App;
 ```
 
-```bash
-cd your-repository-name
-bun install
+## Input Props
+
+| Prop                 | Type                      | Default Value   | Description                                                                                  |
+|----------------------|---------------------------|-----------------|----------------------------------------------------------------------------------------------|
+| `label`              | `string`                  | `null`          | Label displayed above the input field.                                                       |
+| `value`              | `string`                  | `""`            | The value of the input field.                                                                |
+| `defaultValue`       | `string`                  | `""`            | Initial default value of the input field.                                                    |
+| `validationRules`    | `ValidationRule[]`        | `[]`            | Array of validation rules with functions and error messages.                                 |
+| `isLoading`          | `boolean`                 | `false`         | Shows a loading spinner if `true`.                                                          |
+| `isDisabled`         | `boolean`                 | `false`         | Makes the input field non-editable and disabled if `true`.                                   |
+| `isReadOnly`         | `boolean`                 | `false`         | Makes the input field read-only if `true`.                                                   |
+| `variant`            | `"underline" \| "outlined" \| "ghost"` | `"underline"` | Style variant of the input field.                                                           |
+| `leftIcon`           | `React.ReactNode`         | `null`          | Icon to display on the left of the input field.                                              |
+| `rightIcon`          | `React.ReactNode`         | `null`          | Icon to display on the right of the input field.                                             |
+| `secureTextEntry`    | `boolean`                 | `false`         | Toggles secure text input (e.g., password fields).                                           |
+| `secureTextIconColor`| `string`                  | `"gray"`        | Color of the toggle icon for secure text visibility.                                         |
+| `onValidationComplete` | `(isValid: boolean) => void` | `null`      | Callback invoked when validation is completed.                                               |
+| `style`              | `ViewStyle`               | `null`          | Custom styles for the input container.                                                      |
+| `textStyle`          | `TextStyle`               | `null`          | Custom styles for the input text.                                                           |
+
+## Example Usage with All Props
+
+```tsx
+<Input
+    label="Password"
+    placeholder="Enter your password"
+    secureTextEntry={true}
+    validationRules={[
+        { validate: (value) => value.length >= 6, errorMessage: "Password must be at least 6 characters long" },
+    ]}
+    variant="outlined"
+    isLoading={false}
+    isDisabled={false}
+    leftIcon={<Ionicons name="lock-closed" size={20} color="gray" />}
+    rightIcon={<Ionicons name="eye" size={20} color="gray" />}
+    secureTextIconColor="blue"
+    onValidationComplete={(isValid) => console.log(`Validation Status: ${isValid}`)}
+    style={{ marginBottom: 20 }}
+/>
 ```
 
-### 3. Start the Expo Project
+## Styling and Variants
 
-Run the following command to start the Expo development server:
+### Variants
 
-```bash
-npx expo start
-```
+- **`underline`**: A minimal style with only an underline.
+- **`outlined`**: Input field with a border around it.
+- **`ghost`**: Input field with no border or background.
 
-or, if using Yarn or Bun:
+### Theming
 
-```bash
-yarn expo start
-```
+This component supports light and dark themes dynamically using the `useColorScheme` hook. The colors can be customized via the `Colors.ts` file.
 
-```bash
-bunx expo start
-```
+### Icons
 
-This will open the Expo Developer Tools in your browser. From there, you can run the app on an iOS/Android simulator or on a physical device via the Expo Go app.
-
-### 4. Running on a Physical Device
-
-To run the project on your physical device:
-
-1. Install the [Expo Go app](https://docs.expo.dev/get-started/installation/#2-install-the-expo-go-app) on your phone from the App Store (iOS) or Google Play Store (Android).
-2. Scan the QR code that appears in the Expo Developer Tools in your browser.
-3. The app will open on your device.
-
-### 5. Run on an Emulator
-
-If you have an Android or iOS simulator set up, you can run the app directly from the command line.
-
-For iOS (requires macOS and Xcode):
-
-```bash
-npm run ios
-```
-
-For Android:
-
-```bash
-npm run android
-```
-
-## Customizing the Template
-
-This template is designed to be easily customizable:
-
-- Modify the `_layout.tsx` file to update the main layout or shared components across screens.
-- Add new screens or components inside the app folder by creating new `.tsx` files. Each file becomes a new route automatically.
-- Edit the stylesheet directory for global styles and import them into your components as needed.
-
-## Troubleshooting
-
-If you encounter any issues during installation or while running the app:
-
-- Ensure that you have a stable internet connection as dependencies need to be downloaded.
-- Make sure that you have the latest versions of Node.js, npm, and Expo CLI.
-- If you face any issues running on a simulator or device, try restarting the Expo server or rebuilding the app.
+Icons from the `Ionicons` library can be added on either side of the input field. Combine them with actions like toggling secure text visibility.
 
 ## Contributing
 
-If you'd like to contribute to this template, feel free to submit a pull request. Contributions are always welcome!
+Feel free to contribute by forking the repository, making your changes, and submitting a pull request. All suggestions and improvements are welcome!
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This **Input Component** is licensed under the MIT License. See [LICENSE](./LICENSE) for more details.
